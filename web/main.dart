@@ -3,7 +3,7 @@
 
 import 'package:angular2/platform/browser.dart';
 
-import 'package:angular_app/app_component.dart';
+import 'package:gong_web/gong_web.dart';
 
 void main() {
   bootstrap(AppComponent);
