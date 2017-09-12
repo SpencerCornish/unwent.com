@@ -2,6 +2,6 @@
 <header></header>
 <section class="section">
     <div class="container">
-        <p>hello</p>
+        <p *ngIf="fbService.user != null">Welcome, {{fbService.user?.displayName}}</p>
     </div>
 </section>

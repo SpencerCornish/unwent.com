@@ -1,22 +1,53 @@
 <header>
-<nav class="navbar">
-  <div class="navbar-brand">
-    <a class="navbar-item" href="http://bulma.io">
-      <img src="http://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
-    </a>
+   <nav class="navbar">
+      <div class="navbar-brand">
+         <a class="navbar-item">
+         The Gong!
+         </a>
+      </div>
+      <div class="navbar-end">
+         <span class="nav-item" *ngIf="fbService.user == null">
 
-    <div class="navbar-burger">
-      <span></span>
-      <span></span>
-      <span *ngIf="fbService.user == null">
-        <button class="btn btn-outline-secondary btn-sm" (click)="fbService.signIn()">Sign In with Google</button>
-      </span>
-      <span *ngIf="fbService.user != null">
-        <img class="icon" [src]="fbService.user?.photoURL">
-        <div id="user-name">{{fbService.user?.displayName}}</div>
-        <button class="btn btn-outline-secondary btn-sm" (click)="fbService.signOut()">Sign Out</button>
-      </span>
+               <a class="button is-primary" (click)="fbService.signIn()">
+               <span class="icon">
+               <i class="fa fa-sign-in" aria-hidden="true"></i>
+               </span>
+               <span>Sign In with Google</span>
+               </a>
+
+         </span>
+         <span class="nav-item" *ngIf="fbService.user != null">
+            <div class="media">
+               <div class="media-left">
+                  <figure class="image is-24x24">
+                     <img [src]="fbService.user?.photoURL" alt="Image">
+                  </figure>
+               </div>
+               <div class="media-content">
+                  <p class="">{{fbService.user?.displayName}}</p>
+               </div>
+            </div>
+         </span>
+        <span class="nav-item" *ngIf="fbService.user != null">
+         <a class="button is-small" (click)="fbService.signOut()">
+           <span class="icon">
+             <i class="fa fa-sign-out" aria-hidden="true"></i>
+           </span>
+           <span>Sign Out</span>
+         </a>
+       </span>
+      </div>
+   </nav>
+   <section class="hero is-dark is-bold">
+  <div class="hero-body">
+    <div class="container is-widescreen">
+      <h1 class="title">
+        The Gong has been rung 0 times!
+      </h1>
+      <h2 class="subtitle">
+        I'm sure this number will increase soon!
+      </h2>
     </div>
   </div>
-</nav>
+</section>
 </header>
