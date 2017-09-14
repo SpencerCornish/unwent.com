@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:angular2/core.dart';
 
 import '../header/header.dart';
@@ -14,4 +12,6 @@ class AppComponent {
   final FirebaseService fbService;
 
   AppComponent(FirebaseService this.fbService);
+
+  String timeAgo() => "31m";
 }
