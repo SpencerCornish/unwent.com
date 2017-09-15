@@ -11,12 +11,11 @@ import '../../services/firebase_service.dart';
     providers: const [FirebaseService])
 class AppComponent {
   final FirebaseService fbService;
-
+  String description;
   AppComponent(FirebaseService this.fbService);
 
-  String timeAgo(Ring ring) {
-    Duration dur =
-        new DateTime.now().difference(DateTime.parse(ring.timeStamp));
+  String timeAgo(String timeStamp) {
+    Duration dur = new DateTime.now().difference(DateTime.parse(timeStamp));
     // the last minute
     if (dur.inMinutes == 0) return "just now";
     // Years ago
@@ -30,5 +29,9 @@ class AppComponent {
       return " ${dur.inHours} hour${dur.inHours > 1 ? "s" : ""} ago";
     // Minutes ago
     return " ${dur.inMinutes} minute${dur.inMinutes > 1 ? "s" : ""} ago";
+  }
+
+  sendRing() {
+    fbService.sendRing(description);
   }
 }

@@ -54,6 +54,7 @@ class FirebaseService {
 
   Future _addNewUser(User newUser) async {
     await _fbDatabase.ref("users/${newUser.uid}").set(newUser.toMap());
+    userList[newUser.uid] = newUser;
   }
 
   void _newRing(fb.QueryEvent event) {
@@ -68,7 +69,6 @@ class FirebaseService {
     var userRef = await _fbDatabase.ref('users/${uid}').once('value');
     User user = new User.fromMap(userRef.snapshot.key, userRef.snapshot.val());
     userList[uid] = user;
-    print(userList);
   }
 
   Future sendRing(String message) async {

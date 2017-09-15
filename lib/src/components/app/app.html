@@ -1,28 +1,35 @@
 <header></header>
 <section class="section">
-   <div class="container">
-      <p *ngIf="fbService.user != null">Welcome, {{fbService.user?.displayName}}</p>
-      <a class="button is-outlined is-success" (click)="fbService.sendRing('Hello world123')" >Ring the Damn gong</a>
+   <div class="container" *ngIf="fbService.user != null">
       <div class="section">
-         <div *ngFor="let ring of fbService.rings.reversed">
+        <div class="box">
+            <strong>Ring me!</strong>
+              <p>
+                <textarea class="textarea" style="width:20rem" [(ngModel)]="description" placeholder="Enter your ring message."></textarea>
+              </p>
+              <a class="button is-outlined is-success" (click)="sendRing()" >Ring the Damn gong</a>
+            </div>
+        <div class='columns'>
+          <div class='column is-half'>
+         <div class="box" *ngFor="let ring of fbService.rings.reversed">
             <article class="media">
                <figure class="media-left">
-                  <p class="image is-64x64">
+                  <p class="image is-64x64 is-unselectable">
                      <img src="{{fbService.userList[ring.uid].avatarUrl}}">
                   </p>
                </figure>
                <div class="media-content">
                   <div class="content">
                      <p>
-                        <strong>{{fbService.userList[ring.uid].displayName}}</strong> <small>{{timeAgo(ring)}}</small>
+                        <strong>{{fbService.userList[ring.uid].displayName}}</strong> <small>{{timeAgo(ring.timeStamp)}}</small>
                         <br>
                         {{ring.message}}
                      </p>
                   </div>
                   <nav class="level is-mobile">
-                     <div class="level-left">
+                     <div class="level-left is-unselectable	">
                         <a class="level-item" (click)="fbService.addLike(ring)">
-                          +{{ring.likes}}
+                        +{{ring.likes}}
                         <span class="icon is-small"><i class="fa fa-heart"></i></span>
                         </a>
                      </div>
@@ -30,6 +37,22 @@
                </div>
             </article>
          </div>
+       </div>
       </div>
+    </div>
    </div>
 </section>
+<footer class="footer">
+   <div class="container">
+      <div class="content has-text-centered">
+         <p>
+            <strong>Gong-Web</strong> by <a href="#">Spencer Cornish</a>.
+         </p>
+         <p>
+            <a class="icon" href="https://github.com/spencercornish/gong-web">
+            <i class="fa fa-github"></i>
+            </a>
+         </p>
+      </div>
+   </div>
+</footer>
