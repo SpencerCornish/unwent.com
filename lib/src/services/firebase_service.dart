@@ -20,9 +20,9 @@ class FirebaseService {
 
   int numRings;
 
-  List<Ring> rings;
+  List<Ring> rings = [];
 
-  Map<String, User> localUserList;
+  Map<String, User> userList = new Map<String, User>();
 
   FirebaseService() {
     // Initialization of Firebase
@@ -40,39 +40,50 @@ class FirebaseService {
     // Database
     _fbDatabase = fb.database();
     _fbRefRings = _fbDatabase.ref("rings");
-    _fbRefUsers = _fbDatabase.ref("users");
     _fbRefGlobal = _fbDatabase.ref("global");
   }
 
   void _authUpdated(fb.AuthEvent event) {
     user = event.user;
-
-    //_fbRefUsers.push({});
+    _addNewUser(new User(user.uid, user.displayName, user.photoURL));
 
     if (user != null) {
       _fbRefRings.limitToLast(10).onChildAdded.listen(_newRing);
-      _addNewUser(new User(user.uid, user.displayName, user.photoURL));
     }
   }
 
   Future _addNewUser(User newUser) async {
-    await _fbRefUsers.push().set(newUser.toMap());
+    await _fbDatabase.ref("users/${newUser.uid}").set(newUser.toMap());
   }
 
   void _newRing(fb.QueryEvent event) {
     print(event.snapshot.val());
     Ring newRing = new Ring.fromMap(event.snapshot.val(), event.snapshot.key);
     rings.add(newRing);
+    _cacheUser(newRing.uid);
+  }
+
+  _cacheUser(String uid) async {
+    if (userList.containsKey(uid)) return;
+    var userRef = await _fbDatabase.ref('users/${uid}').once('value');
+    User user = new User.fromMap(userRef.snapshot.key, userRef.snapshot.val());
+    userList[uid] = user;
+    print(userList);
   }
 
   Future sendRing(String message) async {
     String time = new DateTime.now().toIso8601String();
     try {
-      Ring ring = new Ring(false, 99, message, time, user.uid);
+      Ring ring = new Ring(false, 0, message, time, user.uid);
       await _fbRefRings.push().set(ring.toMap());
     } catch (error) {
       print("$runtimeType::sendMessage() -- $error");
     }
+  }
+
+  Future addLike(Ring ring) async {
+    ring.likes += 1;
+    _fbRefRings.child('${ring.uid}').set(ring.toMap());
   }
 
   Future signIn() async {

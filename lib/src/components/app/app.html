@@ -2,26 +2,27 @@
 <section class="section">
    <div class="container">
       <p *ngIf="fbService.user != null">Welcome, {{fbService.user?.displayName}}</p>
-      <a class="button is-outlined" (click)="fbService.sendRing('Hello world123')" >Ring the Damn gong</a>
+      <a class="button is-outlined is-success" (click)="fbService.sendRing('Hello world123')" >Ring the Damn gong</a>
       <div class="section">
-         <div *ngFor="let ring of fbService.rings">
+         <div *ngFor="let ring of fbService.rings.reversed">
             <article class="media">
                <figure class="media-left">
                   <p class="image is-64x64">
-                     <img src="http://bulma.io/images/placeholders/128x128.png">
+                     <img src="{{fbService.userList[ring.uid].avatarUrl}}">
                   </p>
                </figure>
                <div class="media-content">
                   <div class="content">
                      <p>
-                        <strong>{{ring.uid}}</strong> <small>{{timeAgo()}}</small>
+                        <strong>{{fbService.userList[ring.uid].displayName}}</strong> <small>{{timeAgo(ring)}}</small>
                         <br>
                         {{ring.message}}
                      </p>
                   </div>
                   <nav class="level is-mobile">
                      <div class="level-left">
-                        <a class="level-item">
+                        <a class="level-item" (click)="fbService.addLike(ring)">
+                          +{{ring.likes}}
                         <span class="icon is-small"><i class="fa fa-heart"></i></span>
                         </a>
                      </div>

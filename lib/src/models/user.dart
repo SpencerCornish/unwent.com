@@ -12,7 +12,7 @@ class User {
   int numRings;
   User(this.uid, this.displayName, this.avatarUrl, [this.lastRingId]);
 
-  User.fromMap(Map map, String ringId)
+  User.fromMap(String uid, Map map)
       : this(
           map['uid'],
           map['displayName'],
@@ -21,7 +21,6 @@ class User {
         );
 
   Map toMap() => {
-        "uid": uid,
         "displayName": displayName,
         "avatarUrl": avatarUrl,
         "lastRingId": lastRingId,
