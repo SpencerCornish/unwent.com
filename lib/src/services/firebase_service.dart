@@ -20,9 +20,11 @@ class FirebaseService {
 
   int numRings;
 
-  List<Ring> rings = [];
+  Map<String, Ring> rings = new Map<String, Ring>();
 
   Map<String, User> userList = new Map<String, User>();
+
+  List<Ring> get ringList => rings.values.toList();
 
   FirebaseService() {
     // Initialization of Firebase
@@ -43,32 +45,20 @@ class FirebaseService {
     _fbRefGlobal = _fbDatabase.ref("global");
   }
 
-  void _authUpdated(fb.AuthEvent event) {
-    user = event.user;
-    _addNewUser(new User(user.uid, user.displayName, user.photoURL));
-
-    if (user != null) {
-      _fbRefRings.limitToLast(10).onChildAdded.listen(_newRing);
-    }
-  }
-
-  Future _addNewUser(User newUser) async {
-    await _fbDatabase.ref("users/${newUser.uid}").set(newUser.toMap());
-    userList[newUser.uid] = newUser;
-  }
-
-  void _newRing(fb.QueryEvent event) {
-    print(event.snapshot.val());
+//////////////
+  /// Ring Section
+//////////////
+  Future _newRing(fb.QueryEvent event) async {
     Ring newRing = new Ring.fromMap(event.snapshot.val(), event.snapshot.key);
-    rings.add(newRing);
-    _cacheUser(newRing.uid);
+    await _cacheUser(newRing.uid);
+    rings[event.snapshot.key] = newRing;
+    print("Rings: ${rings}");
+    // rings.sort((a, b) =>
+    //     DateTime.parse(a.timeStamp).compareTo(DateTime.parse(b.timeStamp)));
   }
 
-  _cacheUser(String uid) async {
-    if (userList.containsKey(uid)) return;
-    var userRef = await _fbDatabase.ref('users/${uid}').once('value');
-    User user = new User.fromMap(userRef.snapshot.key, userRef.snapshot.val());
-    userList[uid] = user;
+  void _ringChanged(fb.QueryEvent event) {
+    rings[event.snapshot.key].parseChanges(event.snapshot.val());
   }
 
   Future sendRing(String message) async {
@@ -81,10 +71,16 @@ class FirebaseService {
     }
   }
 
-  Future addLike(Ring ring) async {
-    ring.likes += 1;
-    _fbRefRings.child('${ring.uid}').set(ring.toMap());
+  Future addLike(String ringId) async {
+    rings[ringId].likes += 1;
+    await _fbDatabase
+        .ref('rings/${rings[ringId].ringId}')
+        .update(rings[ringId].toMap());
   }
+
+//////////
+  /// User/Auth Section
+//////////
 
   Future signIn() async {
     try {
@@ -96,5 +92,27 @@ class FirebaseService {
 
   void signOut() {
     _fbAuth.signOut();
+  }
+
+  void _authUpdated(fb.AuthEvent event) {
+    user = event.user;
+    _addNewUser(new User(user.uid, user.displayName, user.photoURL));
+
+    if (user != null) {
+      _fbRefRings.onChildAdded.listen(_newRing);
+      _fbRefRings.onChildChanged.listen(_ringChanged);
+    }
+  }
+
+  Future _addNewUser(User newUser) async {
+    await _fbDatabase.ref("users/${newUser.uid}").set(newUser.toMap());
+    userList[newUser.uid] = newUser;
+  }
+
+  _cacheUser(String uid) async {
+    if (userList.containsKey(uid)) return;
+    var userRef = await _fbDatabase.ref('users/${uid}').once('value');
+    User user = new User.fromMap(userRef.snapshot.key, userRef.snapshot.val());
+    userList[uid] = user;
   }
 }
