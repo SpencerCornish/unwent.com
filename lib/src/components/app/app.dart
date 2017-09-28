@@ -1,7 +1,6 @@
 import 'package:angular2/core.dart';
 
 import '../header/header.dart';
-import '../../models/ring.dart';
 import '../../services/firebase_service.dart';
 
 @Component(

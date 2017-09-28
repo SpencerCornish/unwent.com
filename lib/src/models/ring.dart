@@ -13,12 +13,19 @@ class Ring {
 
   String formattedTime;
   // Users who have liked this ring message
-  int likes;
+  Map<String, bool> likes;
 
-  Ring(this.confirmed, this.likes, this.message, this.timeStamp, this.uid,
+  // Periodic timer to update the formatting string.
+  Timer updateFormattedTime;
+
+  Ring(this.confirmed, Map<String, bool> likes, this.message, this.timeStamp,
+      this.uid,
       [this.ringId]) {
+    this.likes = likes ?? new Map<String, bool>();
+    // Initialize the formatted string for duration
     formattedTime = _timeAgo();
-    Timer time = new Timer.periodic(
+
+    updateFormattedTime = new Timer.periodic(
         new Duration(minutes: 1), (_) => formattedTime = _timeAgo());
   }
 
@@ -34,7 +41,6 @@ class Ring {
 
   Map toMap() => {
         "confirmed": confirmed,
-        "likes": likes,
         "message": message,
         "timeStamp": timeStamp,
         "uid": uid,
@@ -42,16 +48,21 @@ class Ring {
       };
 
   String _timeAgo() {
-    print("running for id ${ringId}");
     Duration dur = new DateTime.now().difference(DateTime.parse(timeStamp));
     // the last minute
     if (dur.inMinutes == 0) return "just now";
     // Years ago
-    if (dur.inDays > 364)
+    if (dur.inDays > 364) {
+      print("Cancelling timer");
+      updateFormattedTime?.cancel();
       return " ${(dur.inDays~/365)} year${dur.inDays/365 > 1 ? "s" : ""} ago";
+    }
     // Days ago
-    if (dur.inHours > 24)
+    if (dur.inHours > 24) {
+      print("Cancelling timer");
+      updateFormattedTime?.cancel();
       return " ${dur.inDays} day${dur.inDays > 1 ? "s" : ""} ago";
+    }
     // Hours ago
     if (dur.inMinutes > 59)
       return " ${dur.inHours} hour${dur.inHours > 1 ? "s" : ""} ago";
@@ -60,8 +71,8 @@ class Ring {
   }
 
   void parseChanges(Map map) {
-    map['confirmed'] != confirmed ? confirmed = map['confirmed'] : "";
-    map['likes'] != likes ? likes = map['likes'] : "";
-    map['message'] != message ? message = map['message'] : "";
+    confirmed = map['confirmed'];
+    likes = map['likes'] ?? new Map<String, bool>();
+    message = map['message'];
   }
 }

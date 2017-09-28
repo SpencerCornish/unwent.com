@@ -42,10 +42,10 @@
   <div class="hero-body">
     <div class="container is-widescreen">
       <h1 class="title">
-        The Gong has been rung times!
+        The Gong has been rung {{fbService.totalRings}} times!
       </h1>
       <h2 class="subtitle">
-        The last ring was by.. I
+        The last ring was by {{fbService.lastRinger?.displayName}}
       </h2>
     </div>
 </div>
