@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:angular2/core.dart';
+import 'package:angular/angular.dart';
 import 'package:firebase/firebase.dart' as fb;
 
 import '../models/ring.dart';
@@ -79,6 +79,10 @@ class FirebaseService {
     _rings[event.snapshot.key].parseChanges(event.snapshot.val());
   }
 
+  void _ringRemoved(fb.QueryEvent event) {
+    _rings.remove(event.snapshot.key);
+  }
+
   /// Create and send a ring to the server
   Future sendRing(String message) async {
     String time = new DateTime.now().toIso8601String();
@@ -138,6 +142,7 @@ class FirebaseService {
     if (user != null) {
       _fbRefRings.onChildAdded.listen(_newRingFromFirebase);
       _fbRefRings.onChildChanged.listen(_ringChanged);
+      _fbRefRings.onChildRemoved.listen(_ringRemoved);
 
       _fbDatabase.ref('global/').onValue.listen(_globalUpdated);
     }

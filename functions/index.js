@@ -7,7 +7,7 @@ admin.initializeApp(functions.config().firebase);
 
 
 // Keeps track of the length of the 'likes' child list in a separate property.
-exports.countRingchange = functions.database.ref('/rings/{ringid}').onWrite(event => {
+exports.countRingchange = functions.database.ref('/rings/{ringid}').onCreate(event => {
   const collectionRef = event.data.ref.parent;
   const countRef = admin.database().ref('/global/ringCount');
 
@@ -40,7 +40,7 @@ exports.countRingchange = functions.database.ref('/rings/{ringid}').onWrite(even
 // });
 
 exports.updateRingUid = functions.database.ref('/rings/{pushId}')
-    .onWrite(event => {
+    .onCreate(event => {
       // Grab the current value of what was written to the Realtime Database.
       const original = event.data.val();
       console.log('processing ring ', event.params.pushId, original);

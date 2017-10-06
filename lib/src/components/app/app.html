@@ -20,10 +20,30 @@
                </figure>
                <div class="media-content">
                   <div class="content">
+                    <div class="is-pulled-right">
+                      <div class="tags has-addons">
+
+                        <span class="tag is-info" *ngIf="!ring.confirmed == 'processing'">Processing...</span>
+                        <span class="tag is-success" *ngIf="ring.confirmed =='confirmed'">Confirmed</span>
+                        <span class="tag is-danger" *ngIf="ring.confirmed == 'failed'">Failed. Retry?</span>
+
+                        <span class="tag">
+                          <span class="icon is-small">
+                            <i *ngIf="!ring.confirmed" class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                            <i *ngIf="ring.confirmed" class="fa fa-check-circle"></i>
+                          </span>
+                        </span>
+                                            </div>
+
+
+                    </div>
                      <p>
                         <strong>{{fbService.userList[ring.uid].displayName}}</strong> <small>{{ring.formattedTime}}</small>
                         <br>
                         {{ring.message}}
+                        <span class="icon is-small has-text-success" *ngIf="ring.uid == fbService.user.uid">
+                          <i class="fa fa-pencil-square-o"></i>
+                        </span>
                      </p>
                   </div>
                   <nav class="level is-mobile">
