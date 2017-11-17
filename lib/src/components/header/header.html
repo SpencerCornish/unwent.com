@@ -1,52 +1,45 @@
 <header>
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <a class="navbar-item">
-         The Gong!
-         </a>
-    </div>
-    <div class="navbar-end">
-      <span class="nav-item" *ngIf="fbService.user == null">
-
-               <a class="button is-primary" (click)="fbService.signIn()">
-               <span class="icon">
-               <i class="fa fa-sign-in" aria-hidden="true"></i>
-               </span>
-      <span>Sign In with Google</span>
-      </a>
-
-      </span>
-      <span class="nav-item" *ngIf="fbService.user != null">
-            <div class="media">
-               <div class="media-left">
-                  <figure class="image is-24x24">
-                     <img [src]="fbService.user?.photoURL" alt="Image">
-                  </figure>
-               </div>
-               <div class="media-content">
-                  <p class="">{{fbService.user?.displayName}}</p>
-               </div>
-            </div>
-         </span>
-      <span class="nav-item" *ngIf="fbService.user != null">
-         <a class="button is-small" (click)="fbService.signOut()">
-           <span class="icon">
-             <i class="fa fa-sign-out" aria-hidden="true"></i>
-           </span>
-      <span>Sign Out</span>
-      </a>
-      </span>
-    </div>
-  </nav>
   <section class="hero is-dark is-bold">
     <div class="hero-body">
-      <div class="container is-widescreen">
+      <div class="container is-widescreen is-pulled-left">
         <h1 class="title">
         The Gong has been rung {{fbService.totalRings}} times!
       </h1>
         <h2 class="subtitle">
         The last ring was by {{fbService.lastRinger?.displayName}}
       </h2>
+      </div>
+      <div class="is-pulled-right">
+        <span class="nav-item" *ngIf="fbService.user == null">
+
+                 <a class="button is-primary" (click)="fbService.signIn()">
+                 <span class="icon">
+                 <i class="fa fa-sign-in" aria-hidden="true"></i>
+                 </span>
+        <span>Sign In with Google</span>
+        </a>
+
+        </span>
+        <span class="nav-item" *ngIf="fbService.user != null">
+              <div class="media">
+                 <div class="media-left">
+                    <figure class="image is-24x24">
+                       <img [src]="fbService.user?.photoURL" alt="Image">
+                    </figure>
+                 </div>
+                 <div class="media-content">
+                    <p class="">{{fbService.user?.displayName}}</p>
+                 </div>
+              </div>
+           </span>
+        <span class="nav-item" *ngIf="fbService.user != null">
+           <a class="button is-small" (click)="fbService.signOut()">
+             <span class="icon">
+               <i class="fa fa-sign-out" aria-hidden="true"></i>
+             </span>
+        <span>Sign Out</span>
+        </a>
+        </span>
       </div>
     </div>
   </section>

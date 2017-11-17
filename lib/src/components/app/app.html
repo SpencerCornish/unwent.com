@@ -10,7 +10,7 @@
         <a class="button is-outlined is-success" (click)="sendRing()">Ring the gong</a>
       </div>
       <div class='columns'>
-        <div class='column is-half'>
+        <div class='column'>
           <div class="box" *ngFor="let ring of fbService.ringList">
             <article class="media">
               <figure class="media-left">
@@ -25,7 +25,7 @@
 
                       <span class="tag is-info" *ngIf="!ring.confirmed == 'processing'">Processing...</span>
                       <span class="tag is-success" *ngIf="ring.confirmed =='confirmed'">Confirmed</span>
-                      <span class="tag is-danger" *ngIf="ring.confirmed == 'failed'">Failed. Retry?</span>
+                      <span class="tag is-danger" *ngIf="ring.confirmed == 'failed'">Failed.</span>
 
                       <span class="tag">
                           <span class="icon is-small">
@@ -58,7 +58,7 @@
     </div>
   </div>
 </section>
-<footer class="footer">
+<footer class="footer" *ngIf="fbService.user != null">
   <div class="container">
     <div class="content has-text-centered">
       <p>
