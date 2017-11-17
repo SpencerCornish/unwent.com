@@ -54,6 +54,9 @@ class FirebaseService {
     // Database
     _fbDatabase = fb.database();
     _fbRefRings = fb.database().ref('rings');
+
+    // Update Globals right away
+    _fbDatabase.ref('global/').onValue.listen(_globalUpdated);
   }
 
   _globalUpdated(fb.QueryEvent event) async {
@@ -87,8 +90,7 @@ class FirebaseService {
   Future sendRing(String message) async {
     String time = new DateTime.now().toIso8601String();
     try {
-      Ring ring =
-          new Ring(false, new Map<String, bool>(), message, time, user.uid);
+      Ring ring = new Ring(false, new Map<String, bool>(), message, time, user.uid);
       await _fbRefRings.push().set(ring.toMap());
     } catch (error) {
       print("$runtimeType::sendMessage() -- $error");
@@ -135,16 +137,15 @@ class FirebaseService {
   /// when auth changes one way or another
   void _authUpdated(fb.AuthEvent event) {
     user = event.user;
-    // Add/Update the user in Firebase
-    _addNewUser(new User(user.uid, user.displayName, user.photoURL));
 
     // Logged in:
     if (user != null) {
+      // Add/Update the user in Firebase
+      _addNewUser(new User(user.uid, user.displayName, user.photoURL));
+
       _fbRefRings.onChildAdded.listen(_newRingFromFirebase);
       _fbRefRings.onChildChanged.listen(_ringChanged);
       _fbRefRings.onChildRemoved.listen(_ringRemoved);
-
-      _fbDatabase.ref('global/').onValue.listen(_globalUpdated);
     }
   }
 
@@ -158,7 +159,6 @@ class FirebaseService {
   _cacheUser(String uid) async {
     if (_userList.containsKey(uid)) return;
     var userRef = await _fbDatabase.ref('users/${uid}').once('value');
-    _userList[uid] =
-        new User.fromMap(userRef.snapshot.key, userRef.snapshot.val());
+    _userList[uid] = new User.fromMap(userRef.snapshot.key, userRef.snapshot.val());
   }
 }

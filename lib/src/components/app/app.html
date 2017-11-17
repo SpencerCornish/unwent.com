@@ -1,78 +1,74 @@
 <header></header>
 <section class="section">
-   <div class="container" *ngIf="fbService.user != null">
-      <div class="section">
-        <div class="box">
-            <strong>Ring me!</strong>
-              <p>
-                <textarea class="textarea" style="width:20rem" [(ngModel)]="description" placeholder="Enter your ring message."></textarea>
-              </p>
-              <a class="button is-outlined is-success" (click)="sendRing()" >Ring the gong</a>
-            </div>
-        <div class='columns'>
-          <div class='column is-half'>
-         <div class="box" *ngFor="let ring of fbService.ringList">
+  <div class="container" *ngIf="fbService.user != null">
+    <div class="section">
+      <div class="box">
+        <strong>Ring me!</strong>
+        <p>
+          <textarea class="textarea" style="width:20rem" [(ngModel)]="description" placeholder="Enter your ring message."></textarea>
+        </p>
+        <a class="button is-outlined is-success" (click)="sendRing()">Ring the gong</a>
+      </div>
+      <div class='columns'>
+        <div class='column is-half'>
+          <div class="box" *ngFor="let ring of fbService.ringList">
             <article class="media">
-               <figure class="media-left">
-                  <p class="image is-64x64 is-unselectable">
-                     <img src="{{fbService.userList[ring.uid].avatarUrl}}">
-                  </p>
-               </figure>
-               <div class="media-content">
-                  <div class="content">
-                    <div class="is-pulled-right">
-                      <div class="tags has-addons">
+              <figure class="media-left">
+                <p class="image is-64x64 is-unselectable">
+                  <img src="{{fbService.userList[ring.uid].avatarUrl}}">
+                </p>
+              </figure>
+              <div class="media-content">
+                <div class="content">
+                  <div class="is-pulled-right">
+                    <div class="tags has-addons">
 
-                        <span class="tag is-info" *ngIf="!ring.confirmed == 'processing'">Processing...</span>
-                        <span class="tag is-success" *ngIf="ring.confirmed =='confirmed'">Confirmed</span>
-                        <span class="tag is-danger" *ngIf="ring.confirmed == 'failed'">Failed. Retry?</span>
+                      <span class="tag is-info" *ngIf="!ring.confirmed == 'processing'">Processing...</span>
+                      <span class="tag is-success" *ngIf="ring.confirmed =='confirmed'">Confirmed</span>
+                      <span class="tag is-danger" *ngIf="ring.confirmed == 'failed'">Failed. Retry?</span>
 
-                        <span class="tag">
+                      <span class="tag">
                           <span class="icon is-small">
                             <i *ngIf="!ring.confirmed" class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
                             <i *ngIf="ring.confirmed" class="fa fa-check-circle"></i>
                           </span>
-                        </span>
-                                            </div>
-
-
+                      </span>
                     </div>
-                     <p>
-                        <strong>{{fbService.userList[ring.uid].displayName}}</strong> <small>{{ring.formattedTime}}</small>
-                        <br>
-                        {{ring.message}}
-                        <span class="icon is-small has-text-success" *ngIf="ring.uid == fbService.user.uid">
-                          <i class="fa fa-pencil-square-o"></i>
-                        </span>
-                     </p>
+
+
                   </div>
-                  <nav class="level is-mobile">
-                     <div class="level-left is-unselectable">
-                        <a class="level-item {{ring.likes.keys.contains(fbService.user.uid) ? 'has-text-danger' : '' }}" (click)="fbService.toggleLike(ring.ringId)">
+                  <p>
+                    <strong>{{fbService.userList[ring.uid].displayName}}</strong> <small>{{ring.formattedTime}}</small>
+                    <br> {{ring.message}}
+                  </p>
+                </div>
+                <nav class="level is-mobile">
+                  <div class="level-left is-unselectable">
+                    <a class="level-item {{ring.likes.keys.contains(fbService.user.uid) ? 'has-text-danger' : '' }}" (click)="fbService.toggleLike(ring.ringId)">
                         +{{ring.likes.length}}
                         <span class="icon is-small"><i class="fa fa-heart"></i></span>
                         </a>
-                     </div>
-                  </nav>
-               </div>
+                  </div>
+                </nav>
+              </div>
             </article>
-         </div>
-       </div>
+          </div>
+        </div>
       </div>
     </div>
-   </div>
+  </div>
 </section>
 <footer class="footer">
-   <div class="container">
-      <div class="content has-text-centered">
-         <p>
-            <strong>Gong-Web</strong> by <a href="#">Spencer Cornish</a>.
-         </p>
-         <p>
-            <a class="icon" href="https://github.com/spencercornish/gong-web">
+  <div class="container">
+    <div class="content has-text-centered">
+      <p>
+        <strong>Gong-Web</strong> by <a href="#">Spencer Cornish</a>.
+      </p>
+      <p>
+        <a class="icon" href="https://github.com/spencercornish/gong-web">
             <i class="fa fa-github"></i>
             </a>
-         </p>
-      </div>
-   </div>
+      </p>
+    </div>
+  </div>
 </footer>
