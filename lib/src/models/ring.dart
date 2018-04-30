@@ -1,24 +1,26 @@
 import 'dart:async';
 
 class Ring {
-  bool confirmed;
+  bool status;
   // Firebase Ring ID
   final String ringId;
   // User ID
   final String uid;
+  // Message to place in notification
+  String type;
   // Message to place in notification
   String message;
   // Timestamp of ring
   final String timeStamp;
 
   String formattedTime;
-  // Users who have liked this ring message
+  // Users who have liked this ring
   Map<String, bool> likes;
 
   // Periodic timer to update the formatting string.
   Timer updateFormattedTime;
 
-  Ring(this.confirmed, Map<String, bool> likes, this.message, this.timeStamp, this.uid, [this.ringId]) {
+  Ring(this.status, Map<String, bool> likes, this.type, this.message, this.timeStamp, this.uid, [this.ringId]) {
     this.likes = likes ?? new Map<String, bool>();
     // Initialize the formatted string for duration
 
@@ -29,8 +31,9 @@ class Ring {
 
   Ring.fromMap(Map map, String ringId)
       : this(
-          map['confirmed'],
+          map['status'],
           map['likes'],
+          map['type'],
           map['message'],
           map['timeStamp'],
           map['uid'],
@@ -38,7 +41,8 @@ class Ring {
         );
 
   Map toMap() => {
-        "confirmed": confirmed,
+        "status": status,
+        "type": type,
         "message": message,
         "timeStamp": timeStamp,
         "uid": uid,
@@ -66,8 +70,8 @@ class Ring {
   }
 
   void parseChanges(Map map) {
-    confirmed = map['confirmed'];
+    status = map['status'];
     likes = map['likes'] ?? new Map<String, bool>();
-    message = map['message'];
+    type = map['type'];
   }
 }

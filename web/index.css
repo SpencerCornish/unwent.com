@@ -1,0 +1,10 @@
+.background {
+  display: block;
+  margin:0;
+  position:absolute;
+  background-image: url("bg.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
