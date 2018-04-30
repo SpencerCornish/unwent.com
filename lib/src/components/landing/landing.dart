@@ -19,6 +19,7 @@ class LandingComponent {
     return false;
   }
 
-  int get timeDifference => fbService.timeToNextRing.difference(new DateTime.now()).inSeconds;
+  int get timeDifference =>
+      fbService.timeToNextRing.difference(new DateTime.now()).inSeconds;
   List<String> get options => ['Quiet', 'Loud', 'Obnoxious'];
 }

@@ -31,7 +31,8 @@ class FirebaseService {
   User get lastRinger => _lastRinger;
 
   String _timeToNextRing = "";
-  DateTime get timeToNextRing => DateTime.parse(_timeToNextRing == "" ? "2018-04-29T21:36:48.542932" : _timeToNextRing);
+  DateTime get timeToNextRing => DateTime.parse(
+      _timeToNextRing == "" ? "2018-04-29T21:36:48.542932" : _timeToNextRing);
 
   Map<String, User> get userList => _userList;
   Map<String, User> _userList = new Map<String, User>();
@@ -101,12 +102,14 @@ class FirebaseService {
     DateTime time = new DateTime.now();
     String timeString = time.toIso8601String();
     try {
-      Ring ring = new Ring(false, new Map<String, bool>(), type, message, timeString, user.uid);
+      Ring ring = new Ring(
+          false, new Map<String, bool>(), type, message, timeString, user.uid);
       await _fbRefRings.push().set(ring.toMap());
       await _fbRefQueue.push().set(type);
 
-      
-      await _fbDatabase.ref("/global/timeToNextRing").set(time.add(new Duration(seconds: 45)).toIso8601String());
+      await _fbDatabase
+          .ref("/global/timeToNextRing")
+          .set(time.add(new Duration(seconds: 45)).toIso8601String());
     } catch (error) {
       print("$runtimeType::sendMessage() -- $error");
     }
@@ -175,6 +178,7 @@ class FirebaseService {
   _cacheUser(String uid) async {
     if (_userList.containsKey(uid)) return;
     var userRef = await _fbDatabase.ref('users/${uid}').once('value');
-    _userList[uid] = new User.fromMap(userRef.snapshot.key, userRef.snapshot.val());
+    _userList[uid] =
+        new User.fromMap(userRef.snapshot.key, userRef.snapshot.val());
   }
 }

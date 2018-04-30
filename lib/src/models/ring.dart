@@ -20,11 +20,14 @@ class Ring {
   // Periodic timer to update the formatting string.
   Timer updateFormattedTime;
 
-  Ring(this.status, Map<String, bool> likes, this.type, this.message, this.timeStamp, this.uid, [this.ringId]) {
+  Ring(this.status, Map<String, bool> likes, this.type, this.message,
+      this.timeStamp, this.uid,
+      [this.ringId]) {
     this.likes = likes ?? new Map<String, bool>();
     // Initialize the formatted string for duration
 
-    updateFormattedTime = new Timer.periodic(new Duration(minutes: 1), (_) => formattedTime = _timeAgo());
+    updateFormattedTime = new Timer.periodic(
+        new Duration(minutes: 1), (_) => formattedTime = _timeAgo());
 
     formattedTime = _timeAgo();
   }
@@ -64,7 +67,8 @@ class Ring {
       return " ${dur.inDays} day${dur.inDays > 1 ? "s" : ""} ago";
     }
     // Hours ago
-    if (dur.inMinutes > 59) return " ${dur.inHours} hour${dur.inHours > 1 ? "s" : ""} ago";
+    if (dur.inMinutes > 59)
+      return " ${dur.inHours} hour${dur.inHours > 1 ? "s" : ""} ago";
     // Minutes ago
     return " ${dur.inMinutes} minute${dur.inMinutes > 1 ? "s" : ""} ago";
   }
